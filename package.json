@@ -10,7 +10,7 @@
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
-    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install && npm start"
+    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install && npm build"
   },
   "dependencies": {
     "@angular/animations": "5.2.11",
