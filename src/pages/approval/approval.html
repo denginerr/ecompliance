@@ -1,0 +1,199 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Form Approval</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <label (click)="back()" for="logout" style="position: absolute;
+    left: 23px;
+    top: 28px;
+    color: #ed1b2e;
+    font-size: 24px;
+    cursor: pointer;
+    ">
+    <ion-icon name="arrow-back"></ion-icon>
+  </label>
+  <ion-grid>
+    <div style="padding-left: 30px; padding-bottom: 10px; margin: 20px auto 10px 20px; display:flex;">
+      <h1 style="margin: 0px;">
+        {{ formType.type != 'Draft' ? 'Request from ' + form.requester : 'Create New Request'}}</h1>
+      <label for="draft" style="
+            font-size: 15px;
+            font-weight: 500;
+            padding: 7px 30px 5px;
+            margin-left: 20px;"
+        [ngStyle]="{color: formType.color, backgroundColor: formType.backgroundColor}">{{formType.type}}</label>
+    </div>
+    <ion-row class="ion-align-items-stretch" style="padding: 0px 20px;">
+      <ion-col col-8 style="padding-right: 20px;">
+        <div>
+          <ion-row class="ion-align-items-stretch">
+            <ion-col col-3 style="align-self: center;">
+              <ion-label>Category <label for="required" style="color: #ed1b2e!important;">*</label></ion-label>
+            </ion-col>
+            <ion-col col-9>
+              <ion-item [ngStyle]="{color: form.category ? formType.type === 'Draft' ? 'black' : 'gray' : 'gray'}"
+                style="border-bottom: solid gray 1px;padding-left: 8px;">
+                {{form.category ? form.category : 'Choose here' }}
+              </ion-item>
+              <div *ngIf="formType.type === 'Draft'" style="position: absolute; transform: rotate(90deg); right: 15px;
+                  top: 25px;
+                  z-index: 99;
+                  color: gray;">></div>
+                <span class="field-required" *ngIf="errorLabel.category">
+                  This field is required
+                </span>
+
+              <ion-item *ngIf="formType.type === 'Draft'"
+                style="position: absolute;z-index: 99;width: 98%;bottom: 0px;opacity: 0;">
+                <ion-label>Category</ion-label>
+                <ion-select [(ngModel)]="form.category" okText="Ok" cancelText="Cancel"
+                  [required]="formType.type === 'Draft'" (click)="validation('category')">
+                  <ion-option *ngFor="let item of listCategory" (value)="item.name">{{item.name}}
+                  </ion-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row class="ion-align-items-stretch">
+            <ion-col col-3 style="align-self: center;">
+              <ion-label>Subject <label for="required" style="color: #ed1b2e!important;">*</label></ion-label>
+            </ion-col>
+            <ion-col col-9>
+              <ion-item style="border-bottom: solid gray 1px;padding-left: 0px;">
+                <ion-input placeholder="Input subject here" [(ngModel)]="form.subject" (focus)="validation('subject')"
+                  [required]="formType.type === 'Draft'" [readonly]="formType.type != 'Draft'" [ngStyle]="{color: formType.type != 'Draft' ? 'gray' : null}"></ion-input>
+              </ion-item>
+                <span class="field-required" *ngIf="errorLabel.subject">
+                  This field is required
+                </span>
+            </ion-col>
+          </ion-row>
+          <ion-row class="ion-align-items-stretch">
+            <ion-col col-3 style="align-self: center;">
+              <ion-label>Description <label for="required" style="color: #ed1b2e!important;">*</label></ion-label>
+            </ion-col>
+            <ion-col col-9>
+              <ion-item style="border-bottom: solid gray 1px;padding-left: 0px;">
+                <ion-textarea rows="1" placeholder="Input description here" [(ngModel)]="form.description" (focus)="validation('description')"
+                  [required]="formType.type === 'Draft'" [readonly]="formType.type != 'Draft'" rows="1" maxLength="500"
+                  (keyup)="resize($event)" [ngStyle]="{color: formType.type != 'Draft' ? 'gray' : null}">
+                </ion-textarea>
+              </ion-item>
+                <span class="field-required" *ngIf="errorLabel.description">
+                  This field is required
+                </span>
+            </ion-col>
+          </ion-row>
+          <ion-row class="ion-align-items-stretch">
+            <ion-col col-3 style="align-self: center;">
+              <ion-label>Attachment <label for="required" style="color: #ed1b2e!important;">*</label></ion-label>
+              <sup>Max size: 2MB, File Format: .pdf</sup>
+            </ion-col>
+            <ion-col col-9>
+              <ion-item style="border-bottom: solid gray 1px;padding-left: 0px;">
+                <ion-input [(ngModel)]="form.attachment" type="text" placeholder="Choose File"
+                  [required]="formType.type === 'Draft'" readonly style="cursor: default;padding-left: 28px;">
+                </ion-input>
+                <ion-input *ngIf="formType.type === 'Draft'" type="file"
+                  accept="application/pdf,application/vnd.ms-excel" (change)="changeListener($event);validation('attachment')"
+                  style="position: absolute;bottom: 0px;z-index: 99;opacity: 0;">
+                </ion-input>
+              </ion-item>
+                <span class="field-required" *ngIf="errorLabel.attachment">
+                  This field is required
+                </span>
+              <ion-icon *ngIf="formType.type != 'Draft' && form.attachment" style="color: #ed1b2e;position: absolute;top: 15px;right: 15px;font-size: 26px;cursor: pointer;"
+                name="cloud-download" (click)="downloadAttachment(form.attachment)"></ion-icon>
+                <ion-icon style="color: #eee;position: absolute;top: 13px;left: 15px;font-size: 26px;" [ngStyle]="{color: form.attachment ? 'gray' : '#eee'}"
+                name="document"></ion-icon>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-col>
+      <ion-col col-4>
+        <div style="border: solid gray 1px; border-radius:5px;">
+          <div style="text-align: center;">
+            <ion-item style="border-radius: 5px;">
+              <ion-label style="color: black;opacity: 1;">Approval</ion-label>
+              <ion-select [(ngModel)]="form.type" #C (ionChange)="handleApproval(C.value)" okText="Ok"
+                [required]="formType.type === 'Draft'" disabled="{{formType.type != 'Draft'}}" cancelText="Cancel">
+                <ion-option value="parallel">Parallel</ion-option>
+                <ion-option value="serial">Serial</ion-option>
+              </ion-select>
+            </ion-item>
+          </div>
+          <div style="border-top:  solid gray 1px; padding: 10px;">
+            <ion-list *ngIf="formType.type === 'Draft'" style="max-height: 225px; overflow-y: scroll;" reorder="{{reorderGroup}}"
+              (ionItemReorder)="onRenderItems($event)">
+              <ion-item *ngIf="form.approval.length === 0">
+                <ion-label>
+                  No data approval yet.
+                </ion-label>
+                <ion-reorder slot="end"></ion-reorder>
+              </ion-item>
+              <ion-item *ngFor="let item of form.approval; let i = index" style="border-bottom: solid #eee 1px;">
+                <ion-label>
+                  {{i+1}}. {{item}}
+                </ion-label>
+                <ion-reorder slot="end"></ion-reorder>
+              </ion-item>
+            </ion-list>
+            <ion-list style="max-height: 225px; overflow-y: scroll;"
+              *ngIf="formType.type != 'Draft' && form.approval.length">
+              <ion-item *ngFor="let item of form.approval"
+              style="display: flex;justify-content: space-between;
+                      border-bottom: solid #eee 1px;">
+                <ion-label 
+                style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;">
+                    {{item.name}}<div style="display: flex;flex-direction: column;text-align: right;"><label
+                    style="font-size: smaller;margin-top: 0px;margin-bottom: 5px;">{{item.status}}</label> <label
+                    style="font-size: smaller;">{{item.date}}</label></div></ion-label>
+              </ion-item>
+            </ion-list>
+            <div style="position: relative;" *ngIf="formType.type === 'Draft'">
+              <button ion-button color="danger" block style="display: flex;background-color: #ed1b2e!important;">
+                Add New +</button>
+              <ion-item style="position: absolute;z-index: 99;top: 0;width: 100%;opacity: 0;">
+                <ion-label>Approval</ion-label>
+                <ion-select multiple="true" [(ngModel)]="form.approval" (click)="validation('approval')">
+                  <ion-option *ngFor="let item of listParallel" (value)="item">{{item}}</ion-option>
+                </ion-select>
+              </ion-item>
+            <span class="field-required" *ngIf="errorLabel.approval">
+              This field is required
+            </span>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div style="width: 100%;position: fixed;bottom: 30px;padding: 0 30px;" *ngIf="formType.type === 'Draft'">
+    <button ion-button color="danger" block
+      style="background-color: #ed1b2e!important;height: 40px;" (click)="submit()">
+      Send Request
+    </button>
+  </div>
+
+  <div style="width: 100%;position: fixed;bottom: 30px;padding: 0 30px;" *ngIf="formType.type === 'Pending' && userStorage.type === 'approver'">
+    <ion-row class="ion-align-items-stretch">
+      <ion-col col-6 style="align-self: center;">
+        <button ion-button color="danger" block style="background-color: grey!important;height: 40px;"
+          (click)="approver('reject')">
+          Reject
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button color="danger" block style="background-color: #ed1b2e!important;height: 40px;"
+          (click)="approver('approve')">
+          Approve
+        </button>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

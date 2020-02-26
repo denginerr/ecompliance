@@ -1,0 +1,119 @@
+<ion-header *ngIf="userStorage.type === 'approver'">
+  <ion-toolbar>
+    <ion-title>Approval List</ion-title>
+    <label for="logout" (click)="logout()"
+      style="position: absolute;right: 20px;bottom:20px;color: #ed1b2e;">Logout</label>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="position: static;" *ngIf="userStorage.type === 'approver'">
+  <!-- <button ion-button color="danger"
+    style="position:absolute;background-color: #ed1b2e!important;margin: 0px 15px 0 30px;height: 40px; right: 10px;top: 30px;"
+    (click)="newRequest()">
+    New Request
+  </button> -->
+
+  <div style="padding: 0 20px;margin-bottom: 20px;">
+    <table>
+      <tr>
+        <th>Action</th>
+        <th>
+          Subject
+          <div class="option-table">
+            <ion-icon class="search-table" (click)="searchTable('1')" name="search"></ion-icon>
+            <div class="sort-table" (click)="sortTable($event,'1')" is-asc="true">
+              <ion-icon name="arrow-round-up"></ion-icon>
+              <ion-icon name="arrow-round-down"></ion-icon>
+            </div>
+          </div>
+        </th>
+        <th>
+          Requester
+          <div class="option-table">
+            <ion-icon class="search-table" (click)="searchTable('2')" name="search"></ion-icon>
+            <div class="sort-table" (click)="sortTable($event,'2')" is-asc="true">
+              <ion-icon name="arrow-round-up"></ion-icon>
+              <ion-icon name="arrow-round-down"></ion-icon>
+            </div>
+          </div>
+        </th>
+        <th>
+          Lastest Approval
+          <div class="option-table">
+            <ion-icon class="search-table" (click)="searchTable('3')" name="search"></ion-icon>
+            <div class="sort-table" (click)="sortTable($event,'3')" is-asc="true">
+              <ion-icon name="arrow-round-up"></ion-icon>
+              <ion-icon name="arrow-round-down"></ion-icon>
+            </div>
+          </div>
+        </th>
+      </tr>
+      <tr [ngStyle]="{display: searchOpen ? null : 'none'}">
+        <td></td>
+        <td><input *ngIf="colTable[1].open" [(ngModel)]="searchKey[colTable[1].name]" (keyup)="filter($event,colTable[1].name)" type="text" placeholder="Search Here" style="background-color: transparent; border: solid black 0px; border-bottom: solid #ddd 1px;
+                  border-radius: 5px;
+                  height: 3rem;
+                  font-size: 1.4rem;
+                  font-weight: 400;
+                  color: #000;
+                  font-style: italic;
+                  "></td>
+        <td><input *ngIf="colTable[2].open" [(ngModel)]="searchKey[colTable[2].name]" (keyup)="filter($event,colTable[2].name)" type="text" placeholder="Search Here" style="background-color: transparent; border: solid black 0px; border-bottom: solid #ddd 1px;
+                  border-radius: 5px;
+                  height: 3rem;
+                  font-size: 1.4rem;
+                  font-weight: 400;
+                  color: #000;
+                  font-style: italic;
+                  "></td>
+        <td><input *ngIf="colTable[3].open" [(ngModel)]="searchKey[colTable[3].name]" (keyup)="filter($event,colTable[3].name)" type="text" placeholder="Search Here" style="background-color: transparent; border: solid black 0px; border-bottom: solid #ddd 1px;
+                  border-radius: 5px;
+                  height: 3rem;
+                  font-size: 1.4rem;
+                  font-weight: 400;
+                  color: #000;
+                  font-style: italic;
+                  "></td>
+      </tr>
+      <tr *ngFor="let i of data">
+        <td (click)="navDetail(i)">
+          <ion-icon style="color: #ed1b2e!important;cursor: pointer;" name="eye"></ion-icon>
+        </td>
+        <td>{{i.subject}}</td>
+        <td>{{i.requester}}</td>
+        <td>{{i.lastestApproval}}</td>
+      </tr>
+    </table>
+    <div *ngIf="!this.data.length > 0" style="padding: 10px;font-weight: bold;text-align: center;">
+      No data list yet
+    </div>
+    <ion-row *ngIf="this.data.length > 0" class="ion-align-items-stretch" style="padding: 0px 20px;justify-content: center;align-items: center;">
+      <ion-col col-6>
+        <ion-list style="max-width: 200px;text-decoration: solid;margin: 0 auto;">
+          <ion-item>
+            <ion-label style="color: black;font-size: 14px;">Row Per Page</ion-label>
+            <ion-select [(ngModel)]="selectRow" interface="popover" style="color: black;" (ngModelChange)="changeMaxPerPage($event)">
+              <ion-option value="10">10</ion-option>
+              <ion-option value="20">20</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col col-6 style="text-decoration: solid;align-self: center;display: grid;">
+        <div style="margin: 0 auto;font-weight: bold;">
+          <ion-icon *ngIf="activePage >= 1" (click)="openPage(activePage - 1)" name="md-arrow-dropleft" style="padding-right: 10px;cursor: pointer;"></ion-icon>
+          <label>Page</label>
+          <label style="color: #ed1b2e;padding: 0 5px;">{{ activePage + 1 }}</label>
+          <label>of</label>
+          <label style="padding: 0 5px;">{{ numberOfPages.length }}</label>
+          <ion-icon *ngIf="activePage <= numberOfPages.length - 2" (click)="openPage(activePage + 1)" name="md-arrow-dropright" style="padding-left: 10px;cursor: pointer;"></ion-icon>
+          <label style="padding-left: 20px;">Jump to</label>
+          <input type="number" [(ngModel)]="goToPageInput"
+            style="border: solid grey 0px;border-bottom: solid gray 1px;max-width: 50px;text-align: end;">
+          <label (click)="goToPage()" style="cursor: pointer;">Go</label>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+</ion-content>

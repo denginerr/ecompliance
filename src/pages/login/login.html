@@ -1,39 +1,28 @@
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>{{ 'LOGIN_TITLE' | translate }}</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content>
-  <form (submit)="doLogin()">
-    <ion-list>
-
-      <ion-item>
-        <ion-label fixed>{{ 'EMAIL' | translate }}</ion-label>
-        <ion-input type="email" [(ngModel)]="account.email" name="email"></ion-input>
-      </ion-item>
-
-      <!--
-      Want to use a Username instead of an Email? Here you go:
-
-      <ion-item>
-        <ion-label floating>{{ 'USERNAME' | translate }}</ion-label>
-        <ion-input type="text" [(ngModel)]="account.username" name="username"></ion-input>
-      </ion-item>
-      -->
-
-      <ion-item>
-        <ion-label fixed>{{ 'PASSWORD' | translate }}</ion-label>
-        <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>
-      </ion-item>
-
-      <div padding>
-        <button ion-button color="primary" block>{{ 'LOGIN_BUTTON' | translate }}</button>
-      </div>
-
-    </ion-list>
+<ion-content padding style="background: url(../../assets/login-bg.png); background-size: cover;
+    --background-color: rgba(0, 0, 0, 0.5);">
+  <div style="padding-left: 20px; padding-bottom: 10px; margin: 20px auto 10px 20px; display:flex;">
+    <h1 style="margin: 0px;"><strong style="color: #ed1b2e!important;">PRU</strong>hub</h1>
+  </div>
+  <form #form="ngForm" (ngSubmit)="login(form)" style="width: 100%;">
+    <ion-grid>
+      <ion-row justify-content-center>
+        <ion-col align-self-center style="padding: 30px;">
+          <div padding>
+            <ion-item>
+              <ion-input name="username" type="username" placeholder="Username" ngModel required (keydown)="tap()"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input name="password" type="password" placeholder="Password" ngModel required (keydown)="tap()"></ion-input>
+            </ion-item>
+            <label style="color: #ed1b2e;" *ngIf="!credentials">*Username or Password is not valid</label>
+          </div>
+          <div padding style="margin: 0 0 10px 0;">
+            <button ion-button block type="submit" [disabled]="form.invalid"
+              style="background: #ed1b2e!important">Login</button>
+          <label for="prudential" style="font-size: smaller;">PT Prudential Indonesia | 2020</label>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </form>
 </ion-content>

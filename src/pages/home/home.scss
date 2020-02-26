@@ -1,0 +1,123 @@
+page-home {
+  ion-menu-button {
+    color: var(--ion-color-primary);
+  }
+
+  #container {
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  #container strong {
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  #container p {
+    font-size: 16px;
+    line-height: 22px;
+    color: #8c8c8c;
+    margin: 0;
+  }
+
+  #container a {
+    text-decoration: none;
+  }
+
+  ion-content ion-toolbar {
+    --background: transparent;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px auto 10px auto;
+    padding: 0 90px;
+  }
+
+  .scroll-content {
+    margin-top: 56px;
+  }
+
+  /* Zebra striping */
+  tr:nth-of-type(even) {
+    background: #f9f6f7;
+  }
+  tr:first-child {
+    background: #f9f6f7;
+  }
+
+  th {
+    text-align: center !important;
+    height: 60px;
+    font-weight: bold;
+    padding: 20px 10px 10px 10px;
+    vertical-align: top;
+    text-align: center;
+    position: relative;
+  }
+
+  td {
+    text-align: center !important;
+    height: 60px;
+    vertical-align: middle;
+    padding: 10px;
+    text-align: center;
+    line-height: 1.25;
+  }
+  .option-table {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .search-table {
+    cursor: pointer;
+    color: grey;
+    font-size: 16px;
+    margin-right: 6px;
+      &:hover {
+          opacity: 0.5;
+      }
+  }
+
+  .sort-table {
+    cursor: pointer;
+    color: #ed1b2e;
+    font-size: 14px;
+    ion-icon:first-child {
+      margin-right: -1px;
+    }
+    &[is-asc="true"] {
+      ion-icon:first-child {
+        opacity: 0.5;
+      }
+      ion-icon:last-child {
+        opacity: 1;
+      }
+    }
+    &[is-asc="false"] {
+      ion-icon:first-child {
+        opacity: 1;
+      }
+      ion-icon:last-child {
+        opacity: 0.5;
+      }
+    }
+    &:hover {
+      &[is-asc="false"] {
+        ion-icon:first-child {
+          opacity: 0.5;
+        }
+      }
+      &[is-asc="true"] {
+        ion-icon:last-child {
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+}

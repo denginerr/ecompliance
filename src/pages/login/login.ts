@@ -1,50 +1,482 @@
 import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Storage } from "@ionic/storage";
 
-import { User } from '../../providers';
-import { MainPage } from '../';
+/**
+ * Generated class for the LoginPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
 
 @IonicPage()
 @Component({
   selector: 'page-login',
-  templateUrl: 'login.html'
+  templateUrl: 'login.html',
 })
 export class LoginPage {
-  // The account fields for the login form.
-  // If you're using the username field with or without email, make
-  // sure to add it to the type
-  account: { email: string, password: string } = {
-    email: 'test@example.com',
-    password: 'test'
-  };
+  DUMMYDATA = [
+    {
+      formType: {
+        type: 'Approved',
+        color: 'white',
+        backgroundColor: 'green',
+      },
+      form: {
+        requestStatus: 'A',
+        subject: 'Cuti',
+        requester: 'Galih',
+        lastestApproval: 'Tsasqa(A), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Approved',
+            date: '20 Feb 2020 17:45',
+          },
+          {
+            name: 'Martin',
+            status: 'Approved',
+            date: '20 Feb 2020 17:45',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Approve',
+            date: '20 Feb 2020 17:45',
+          },
+        ]
+      },
+    },
+    {
+      formType: {
+        type: 'Rejected',
+        color: 'black',
+        backgroundColor: '#ed1b2e',
+      },
+      form: {
+        requestStatus: 'R',
+        subject: 'Cuti',
+        requester: 'Galih',
+        lastestApproval: 'Tsasqa(R), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Martin',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Rejected',
+            date: '20 Feb 2020 17:45',
+          },
+        ]
+      },
+    },
+    {
+      formType: {
+        type: 'Rejected',
+        color: 'black',
+        backgroundColor: '#ed1b2e',
+      },
+      form: {
+        requestStatus: 'R',
+        subject: 'Pembelian Data',
+        requester: 'Galih',
+        lastestApproval: 'Tsasqa(R), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Martin',
+            status: 'Pending',
+            date: '18 Feb 2020 17:05',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Rejected',
+            date: '20 Feb 2020 15:00',
+          },
+        ],
+      },
+    },
+    {
+      formType: {
+        type: 'Pending',
+        color: 'grey',
+        backgroundColor: 'yellow',
+      },
+      form: {
+        requestStatus: 'P',
+        subject: 'Hiring',
+        requester: 'Galih',
+        lastestApproval: 'Pras(A), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Martin',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Approved',
+            date: '20 Feb 2020 15:00',
+          },
+        ],
+      }
+    },
+    {
+      formType: {
+        type: 'Approved',
+        color: 'white',
+        backgroundColor: 'green',
+      },
+      form: {
+        requestStatus: 'A',
+        subject: 'Cuti',
+        requester: 'Galih',
+        lastestApproval: 'Tsasqa(A), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Approved',
+            date: '20 Feb 2020 17:45',
+          },
+          {
+            name: 'Martin',
+            status: 'Approved',
+            date: '20 Feb 2020 17:45',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Approve',
+            date: '20 Feb 2020 17:45',
+          },
+        ]
+      },
+    },
+    {
+      formType: {
+        type: 'Rejected',
+        color: 'black',
+        backgroundColor: '#ed1b2e',
+      },
+      form: {
+        requestStatus: 'R',
+        subject: 'Cuti',
+        requester: 'Galih',
+        lastestApproval: 'Tsasqa(R), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Martin',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Rejected',
+            date: '20 Feb 2020 17:45',
+          },
+        ]
+      },
+    },
+    {
+      formType: {
+        type: 'Rejected',
+        color: 'black',
+        backgroundColor: '#ed1b2e',
+      },
+      form: {
+        requestStatus: 'R',
+        subject: 'Pembelian Data',
+        requester: 'Galih',
+        lastestApproval: 'Tsasqa(R), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Martin',
+            status: 'Pending',
+            date: '18 Feb 2020 17:05',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Rejected',
+            date: '20 Feb 2020 15:00',
+          },
+        ],
+      },
+    },
+    {
+      formType: {
+        type: 'Pending',
+        color: 'grey',
+        backgroundColor: 'yellow',
+      },
+      form: {
+        requestStatus: 'P',
+        subject: 'Hiring',
+        requester: 'Galih',
+        lastestApproval: 'Pras(A), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Martin',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Approved',
+            date: '20 Feb 2020 15:00',
+          },
+        ],
+      }
+    },
+    {
+      formType: {
+        type: 'Approved',
+        color: 'white',
+        backgroundColor: 'green',
+      },
+      form: {
+        requestStatus: 'A',
+        subject: 'Cuti',
+        requester: 'Dendy',
+        lastestApproval: 'Tsasqa(A), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Approved',
+            date: '20 Feb 2020 17:45',
+          },
+          {
+            name: 'Martin',
+            status: 'Approved',
+            date: '20 Feb 2020 17:45',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Approve',
+            date: '20 Feb 2020 17:45',
+          },
+        ]
+      },
+    },
+    {
+      formType: {
+        type: 'Rejected',
+        color: 'black',
+        backgroundColor: '#ed1b2e',
+      },
+      form: {
+        requestStatus: 'R',
+        subject: 'Cuti',
+        requester: 'Dendy',
+        lastestApproval: 'Tsasqa(R), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Martin',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Rejected',
+            date: '20 Feb 2020 17:45',
+          },
+        ]
+      },
+    },
+    {
+      formType: {
+        type: 'Rejected',
+        color: 'black',
+        backgroundColor: '#ed1b2e',
+      },
+      form: {
+        requestStatus: 'R',
+        subject: 'Pembelian Data',
+        requester: 'Dendy',
+        lastestApproval: 'Tsasqa(R), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Martin',
+            status: 'Pending',
+            date: '18 Feb 2020 17:05',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Rejected',
+            date: '20 Feb 2020 15:00',
+          },
+        ],
+      },
+    },
+    {
+      formType: {
+        type: 'Pending',
+        color: 'grey',
+        backgroundColor: 'yellow',
+      },
+      form: {
+        requestStatus: 'P',
+        subject: 'Hiring',
+        requester: 'Dendy',
+        lastestApproval: 'Pras(A), 20 Feb 2020 17:45',
+        category: 'cuti',
+        description: 'Liburan Keluarga',
+        attachment: 'Prudential.pdf',
+        type: 'parallel',
+        approval: [
+          {
+            name: 'Pras',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Martin',
+            status: 'Pending',
+            date: '18 Feb 2020 17:00',
+          },
+          {
+            name: 'Tsasqa',
+            status: 'Approved',
+            date: '20 Feb 2020 15:00',
+          },
+        ],
+      }
+    },
+  ];
+  credentials = true;
 
-  // Our translated text strings
-  private loginErrorString: string;
-
-  constructor(public navCtrl: NavController,
-    public user: User,
-    public toastCtrl: ToastController,
-    public translateService: TranslateService) {
-
-    this.translateService.get('LOGIN_ERROR').subscribe((value) => {
-      this.loginErrorString = value;
-    })
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public storage: Storage,
+  ) {
   }
 
-  // Attempt to login in through our User service
-  doLogin() {
-    this.user.login(this.account).subscribe((resp) => {
-      this.navCtrl.push(MainPage);
-    }, (err) => {
-      this.navCtrl.push(MainPage);
-      // Unable to log in
-      let toast = this.toastCtrl.create({
-        message: this.loginErrorString,
-        duration: 3000,
-        position: 'top'
-      });
-      toast.present();
-    });
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad LoginPage');
   }
+
+  tap(){
+    this.credentials = true;
+  }
+
+  login(data) {
+    data = data.form.value
+    let user = {
+      name: data.username.toLowerCase(),
+      type: '',
+      dashboard: '',
+      data: this.DUMMYDATA
+    };
+
+    let login = true;
+
+  // userType approver/requester
+    switch (data.username.toLowerCase()) {
+      case 'tsasqa':
+      case 'pras':
+      case 'martin':
+        user.type = 'approver';
+        user.dashboard = 'HomePage';
+        break;
+      case 'galih':
+      case 'dendy':
+        user.type = 'requester';
+        user.dashboard = 'RequestPage';
+        user.data = this.DUMMYDATA.filter(e => e.form.requester.toLowerCase() === user.name);
+        break;
+      default:
+        login = false;
+        this.credentials = false
+        break;
+    }
+    if (login) {
+      console.log(user);
+      this.storage.set('User', user);
+      this.navCtrl.push(user.dashboard);
+    }
+  }
+
 }
